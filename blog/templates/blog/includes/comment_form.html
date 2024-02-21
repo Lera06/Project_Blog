@@ -1,0 +1,20 @@
+{% load crispy_forms_tags %}
+
+        <form action="{% url 'post-comment' post.id %}" method="POST">
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4">Add a new comment</legend>
+                {{ form|crispy }}
+                {% csrf_token %}
+            </fieldset>
+            <div>
+                 <button class="btn btn-outline-info" type="submit">ADD COMMENT</button>
+            </div>
+        </form>
+
+
+
+
+
+
+
+

@@ -1,0 +1,43 @@
+{% extends "blog/base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+    <div class="content-section">
+     {% if sent %}
+         <h3>E-mail successfully sent</h3>
+            <div class="border-top pt-3">
+                <small class="text-muted">
+                    The post "{{ post.title }}" was successfully sent to {{ form.cleaned_data.to }}.
+                    <div>
+                        <a href="{{ post.get_absolute_url }}">Back to the post</a>
+                    </div>
+                </small>
+                </small>
+            </div>
+        </div>
+
+    {% else %}
+
+    {% if user.is_authenticated %}
+        <form method="POST">
+            {% csrf_token %}
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4">Share '{{ post.title }}' by e-mail</legend>
+                {{ form|crispy }}
+            </fieldset>
+            <div class="form-group">
+                <button class="btn btn-outline-info" type="submit">Send e-mail</button>
+            </div>
+        </form>
+    {% else %}
+    <h4>You are not logged in</h4>
+    <div class="border-top pt-3">
+        <small class="text-muted">
+            Please, <a href="{% url 'login' %}">Log In</a> or <a href="{% url 'register' %}">Register</a>
+        </small>
+    </div>
+    {% endif %}
+    </div>
+    {% endif %}
+{% endblock content %}

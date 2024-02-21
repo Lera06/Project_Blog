@@ -1,0 +1,66 @@
+{% extends 'blog/base.html' %}
+
+{% block content %}
+    <article class="media content-section">
+<!--        Image Here               -->
+        <img class="rounded-circle article-img" src="{{ object.author.profile.image.url }}">
+      <div class="media-body">
+        <div class="article-metadata">
+          <a class="mr-2" href="{% url 'user-posts' object.author.username %}">{{ object.author }}</a>
+          <small class="text-muted">{{ object.date_posted | date:"F d, Y" }}</small>
+        </div>
+
+          <p class="tags"> Tags:
+                {% for tag in post.tags.all %}
+                    <a href="{% url 'tagged-posts' tag.slug %}">{{ tag }}</a>
+                {% endfor %}
+            </p>
+
+        <h2 class="article-title">{{ object.title }}</h2>
+        <p class="article-content">{{ object.content }}</p>
+      </div>
+        {% if object.author == user %}
+            <div>
+                <a class="btn btn-secondary btn-sm m-1 mb-1" href="{% url 'post-update' object.id %}">Update</a>
+                <a class="btn btn-danger btn-sm m-1 mb-1" href="{% url 'post-delete' object.id %}">Delete</a>
+            </div>
+            {% endif %}
+        <div>
+            <a class="btn btn-info btn-sm m-1 mb-1" href="{% url 'post-share' object.id %}">Share</a>
+        </div>
+    </article>
+        <div>
+            <fieldset class="form-group">
+           <legend class="border-bottom mb-4">Similar Posts</legend>
+            {% for post in similar_posts %}
+            <p><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></p>
+            {% empty %}
+            There are no similar posts yet.
+            {% endfor %}
+            </fieldset>
+        </div>
+
+    <div>
+        {% with comments.count as total_comments %}
+        <legend class="border-bottom mb-4">{{ total_comments }} comment{{ total_comments|pluralize }}</legend>
+        {% endwith %}
+
+    </div>
+    <div>
+        {% for comment in comments %}
+        <div class="comment">
+            <p class="info">
+           Comment {{ forloop.counter }} by {{ comment.name }}, published on
+           {{ comment.created | date:"F d, Y"}}
+            </p>
+            {{ comment.body|linebreaks }}
+       </div>
+        {% empty %}
+            <p>There are no comments.</p>
+        {% endfor %}
+        </div>
+    <div>
+        {% include "blog/includes/comment_form.html" %}
+    </div>
+
+{% endblock content %}

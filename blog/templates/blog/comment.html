@@ -1,0 +1,18 @@
+{% extends "blog/base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+    <div class="content-section">
+     {% if comment %}
+         <h3>Your comment has been added</h3>
+            <div class="border-top pt-3">
+                <small class="text-muted">
+                    <a href="{{ post.get_absolute_url }}">Back to the post</a>
+                </small>
+            </div>
+        </div>
+
+    {% else %}
+        {% include "blog/includes/comment_form.html" %}
+    {% endif %}
+{% endblock content %}

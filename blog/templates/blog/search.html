@@ -1,0 +1,37 @@
+{% extends "blog/base.html" %}
+{% load crispy_forms_tags %}
+{% load blog_tags %}
+
+
+{% block content %}
+  {% if query %}
+    <legend class="border-bottom mb-4">Posts containing "{{ query }}"</legend>
+    {% with results.count as total_results %}
+    <legend class="border-bottom mb-4">Found {{ total_results }} result{{ total_results|pluralize }}</legend>
+    {% endwith %}
+
+    {% for post in results %}
+        <h2>
+            <a class="article-title" href="{{ post.get_absolute_url }}">{{ post.title }}</a>
+        </h2>
+        <p class="article-content">{{ post.content }}</p>
+    {% empty %}
+    <legend class="border-bottom mb-4">There are no results for your query.</legend>
+    {% endfor %}
+    <div>
+        <a href="{% url 'post-search' %}">Search again</a>
+    </div>
+  {% else %}
+        <form method="get">
+        <fieldset class="form-group">
+            <legend class="border-bottom mb-4">Search for Post</legend>
+              {{ form | crispy }}
+        </fieldset>
+            <div class="form-group">
+                <button class="btn btn-outline-info" type="submit">Search</button>
+            </div>
+        </form>
+  {% endif %}
+
+{% endblock content %}
+
